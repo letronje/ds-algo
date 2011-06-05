@@ -1,8 +1,7 @@
 #! /usr/bin/ruby
 
 def get_permutations(n)
-  start = (1..n).to_a
-  start.permutation.to_a
+  (1..n).to_a.permutation.to_a
 end
 
 def zigzag?(a)
@@ -22,14 +21,25 @@ def swap(a,i,j)
   a[i], a[j] = a[j],a[i]
 end
 
-def zigzag(a)
+
+=begin
+Algo by "Divya Kunnath"
+
+- Makes sure that the zigzag sequence starts with an ascend ( /\/\/\/\/\/\/\..... )
+- Compares every triplet to make sure that they form a /\ pattern(ascend followed by a descend)
+
+=end
+
+def zigzagify(a)
   a = a.clone
   s = a.size
   (0..(s-2)).step(2).each do |i|
+    #Making sure there is an ascend
     if a[i] > a[i+1]
       swap(a, i, i+1)
     end
     
+    #Making sure there is a descend
     if a[i+2] and a[i+1] < a[i+2]
       swap(a, i+1, i+2)
     end
@@ -37,20 +47,15 @@ def zigzag(a)
   a
 end
 
-n=10
+n=8
 
 perms = get_permutations(n)
-puts perms.size
+puts "Num permutations = #{perms.size}"
 
 perms.each do |p|
-  z = zigzag(p)
-  iz = zigzag? z
-  unless iz
-    print p.inspect
-    print " "
-    print z.inspect
-    print " "
-    puts "false"
+  z = zigzagify p
+  unless zigzag? z
+    puts "#{p.inspect} #{z.inspect} => false"
     break
   end
 end
